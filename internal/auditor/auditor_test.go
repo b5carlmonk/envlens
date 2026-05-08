@@ -74,8 +74,8 @@ func TestRun_EmptyChanges(t *testing.T) {
 
 func TestIsSensitiveKey(t *testing.T) {
 	cases := []struct {
-		key      string
-		want     bool
+		key  string
+		want bool
 	}{
 		{"DB_PASSWORD", true},
 		{"API_KEY", true},
@@ -88,5 +88,23 @@ func TestIsSensitiveKey(t *testing.T) {
 		if got != tc.want {
 			t.Errorf("isSensitiveKey(%q) = %v, want %v", tc.key, got, tc.want)
 		}
+	}
+}
+
+// TestRun_AnnotatesSensitiveAdded verifies that adding a sensitive key
+// (e.g. a new secret) is also flagged with a critical annotation.
+func TestRun_AnnotatesSensitiveAdded(t *testing.T) {
+	changes := []differ.Change{
+		{Key: "NEW_API_KEY", Type: differ.Added, NewValue: "secret123"},
+	}
+	result := Run("a", "b", changes)
+	var found bool
+	for _, ann := range result.Annotations {
+		if ann.Key == "NEW_API_KEY" && ann.Severity == "critical" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("expected critical annotation for newly added sensitive key NEW_API_KEY")
 	}
 }
