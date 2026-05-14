@@ -1,24 +1,15 @@
-// Package differ implements environment variable diffing for envlens.
+// Package differ provides functionality for comparing two environment variable
+// maps and producing a structured list of changes.
 //
-// It compares two maps of environment variables (old vs new) and produces
-// a structured Result containing categorised change entries.
+// A change can be one of three types:
+//   - Added: a key present in the target but not in the source
+//   - Removed: a key present in the source but not in the target
+//   - Modified: a key present in both but with a different value
 //
 // Usage:
 //
-//	oldEnv, _ := parser.ParseFile(".env.old")
-//	newEnv, _ := parser.ParseFile(".env.new")
-//
-//	result := differ.Compare(oldEnv, newEnv)
-//
-//	for _, e := range result.Added() {
-//		fmt.Printf("+ %s=%s\n", e.Key, e.NewValue)
+//	changes := differ.Compare(sourceEnv, targetEnv)
+//	for _, c := range changes {
+//		fmt.Println(c.Key, c.Type)
 //	}
-//	for _, e := range result.Removed() {
-//		fmt.Printf("- %s=%s\n", e.Key, e.OldValue)
-//	}
-//	for _, e := range result.Modified() {
-//		fmt.Printf("~ %s: %s -> %s\n", e.Key, e.OldValue, e.NewValue)
-//	}
-//
-// ChangeType constants: Added, Removed, Modified, Unchanged.
 package differ
