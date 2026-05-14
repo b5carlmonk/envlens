@@ -16,4 +16,8 @@
 //
 // Use Report.HasChanges() to detect whether any diff was found, and
 // Report.Summary() for a one-line change count.
+//
+// To render to a string instead of an io.Writer, use RenderString:
+//
+//	output, err := report.RenderString(reporter.FormatJSON)
 package reporter
