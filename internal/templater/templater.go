@@ -24,6 +24,15 @@ func (r ValidationResult) HasIssues() bool {
 	return len(r.MissingRequired) > 0 || len(r.UnexpectedKeys) > 0
 }
 
+// AllKeys returns a sorted list of all keys defined in the template (both required and optional).
+func (t *Template) AllKeys() []string {
+	keys := make([]string, 0, len(t.Required)+len(t.Optional))
+	keys = append(keys, t.Required...)
+	keys = append(keys, t.Optional...)
+	sort.Strings(keys)
+	return keys
+}
+
 // FromMap builds a Template from a map where values indicate "required" or "optional".
 func FromMap(m map[string]string) (*Template, error) {
 	t := &Template{}
