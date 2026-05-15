@@ -1,15 +1,16 @@
 // Package differ provides functionality for comparing two environment variable
 // maps and producing a structured list of changes.
 //
-// A change can be one of three types:
-//   - Added: a key present in the target but not in the source
-//   - Removed: a key present in the source but not in the target
-//   - Modified: a key present in both but with a different value
+// # Overview
 //
-// Usage:
+// The differ package accepts two maps of string key-value pairs (representing
+// parsed .env files or deployment environment snapshots) and returns a slice
+// of Change values describing what was added, removed, or modified.
 //
-//	changes := differ.Compare(sourceEnv, targetEnv)
+// # Usage
+//
+//	changes := differ.Compare(source, target)
 //	for _, c := range changes {
-//		fmt.Println(c.Key, c.Type)
+//		fmt.Println(c.Type, c.Key)
 //	}
 package differ
